@@ -78,7 +78,10 @@
                 ></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form
+                    [formGroup]="formValue"
+                    (ngSubmit)="onSubmit()"
+                >
                     <div class="mb-3">
                         <label
                             for="title"
@@ -91,6 +94,7 @@
                             class="form-control"
                             id="title"
                             placeholder="Enter movie title"
+                            formControlName="title"
                         >
                     </div>
                     <div class="mb-3">
@@ -104,6 +108,7 @@
                             class="form-control"
                             id="description"
                             placeholder="Write a short description"
+                            formControlName="description"
                         ></textarea>
                     </div>
                     <div class="mb-3">
@@ -117,6 +122,8 @@
                             type="file"
                             class="form-control"
                             id="videoFile"
+                            (change)="onFileChange($event)"
+                            accept="video/*"
                         >
                       </div>
                 </form>
@@ -128,7 +135,7 @@
                 >
                     Close
                 </button>
-                <button class="btn btn-primary">
+                <button type="submit" class="btn btn-primary">
                     Add
                 </button>
             </div>
