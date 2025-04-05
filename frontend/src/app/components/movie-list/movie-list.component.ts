@@ -42,7 +42,7 @@ export class MovieListComponent {
     getAllMovies(): void {
       this.movieService.fetchAllMovies().then((response) => {
         this.movies = response.data.map((movie: any) => {
-          movie.dateAdded = this.datePipe.transform(movie.date_added, 'mediumDate');  // Format the date
+          movie.date_added = this.datePipe.transform(movie.date_added, 'mediumDate');
           return movie;
         });
       }).catch((error) => {

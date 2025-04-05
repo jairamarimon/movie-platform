@@ -18,7 +18,8 @@ export class MovieDetailComponent {
 
   constructor(
     private route: ActivatedRoute, 
-    private movieService: MovieService
+    private movieService: MovieService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -32,6 +33,8 @@ export class MovieDetailComponent {
   fetchMovieDetails(id: number): void {
     this.movieService.getMovie(id).then((response) => {
       this.movie = response;
+      let formattedDateAdded = this.datePipe.transform(response.date_added, 'longDate');
+      this.movie.date_added = formattedDateAdded as string;
     }).catch((error) => {
       console.error('Error fetching movie details:', error);
     });

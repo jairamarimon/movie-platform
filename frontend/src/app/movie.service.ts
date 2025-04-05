@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Movie from './Movie';
 
 @Injectable({
@@ -22,14 +22,24 @@ export class MovieService {
     return axios.get<Movie[]>(this.url);
   }
 
-  getMovie(id: number) {
-    return axios
-      .get<Movie>(`${this.url}/${id}`)
-      .then((response) => response.data)
-      .catch((error) => {
-        console.error('Error fetching movie by ID:', error);
-        throw error;
-      });
+  // getMovie(id: number) {
+  //   return axios
+  //     .get<Movie>(`${this.url}${id}`)
+  //     .then((response) => response.data)
+  //     .catch((error) => {
+  //       console.error('Error fetching movie by ID:', error);
+  //       throw error;
+  //     });
+  // }
+
+  async getMovie(id: number): Promise<Movie> {
+    try {
+      const response: AxiosResponse<Movie> = await axios.get(`${this.url}${id}/`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching movie by ID:', error);
+      throw error;
+    }
   }
 
   updateMovie(id: number, movie: Movie) {

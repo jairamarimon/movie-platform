@@ -33,7 +33,7 @@
                 <tr *ngFor="let movie of movies">
                     <td>{{ movie.title }}</td>
                     <td>{{ movie.description }}</td>
-                    <td>{{ movie.dateAdded }}</td>
+                    <td>{{ movie.date_added }}</td>
                     <td class="text-center">
                         <!-- <button class="btn btn-sm btn-outline-primary">View</button> -->
                         <a [routerLink]="['/movie', movie.id]" class="btn btn-sm btn-outline-primary ms-3">

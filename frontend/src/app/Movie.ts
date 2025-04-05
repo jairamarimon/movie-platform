@@ -2,6 +2,6 @@ export default interface Movie {
     id: number,
     title: string,
     description: string,
-    dateAdded: string,
+    date_added: string,
     video: string,
 }
