@@ -4,7 +4,7 @@ from .serializers import MovieSerializer
 from rest_framework.response import Response
 
 
-class MovieListView(generics.GenericAPIView):
+class MovieListView(generics.ListCreateAPIView):
     serializer_class = MovieSerializer
     queryset = Movie.objects.all()
 
@@ -17,6 +17,6 @@ class MovieListView(generics.GenericAPIView):
             return Response("Movie does not exist")
 
 
-class MovieDetailView(generics.GenericAPIView):
+class MovieDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MovieSerializer
     queryset = Movie.objects.all()
