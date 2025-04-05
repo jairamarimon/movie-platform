@@ -39,11 +39,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>sample</td>
-                    <td>sample</td>
-                    <td>sample</td>
-                    <td>sample</td>
+                <tr *ngFor="let movie of movies">
+                    <td>{{ movie.title }}</td>
+                    <td>{{ movie.description }}</td>
+                    <td>{{ movie.dateAdded }}</td>
+                    <td>{{ movie.video }}</td>
                     <td class="text-center">
                         <button class="btn btn-sm btn-outline-primary me-2">Edit</button>
                         <button class="btn btn-sm btn-outline-danger">Delete</button>
@@ -77,11 +77,12 @@
                     aria-label="Close"
                 ></button>
             </div>
-            <div class="modal-body">
-                <form
-                    [formGroup]="formValue"
-                    (ngSubmit)="onSubmit()"
-                >
+            <form
+                [formGroup]="movieForm"
+                (ngSubmit)="addMovie()"
+                enctype="multipart/form-data"
+            >
+                <div class="modal-body">
                     <div class="mb-3">
                         <label
                             for="title"
@@ -113,7 +114,7 @@
                     </div>
                     <div class="mb-3">
                         <label
-                            for="videoFile"
+                            for="video"
                             class="form-label"
                         >
                             Video File
@@ -121,24 +122,24 @@
                         <input
                             type="file"
                             class="form-control"
-                            id="videoFile"
+                            id="video"
                             (change)="onFileChange($event)"
                             accept="video/*"
                         >
-                      </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button
-                    class="btn btn-outline-secondary"
-                    data-bs-dismiss="modal"
-                >
-                    Close
-                </button>
-                <button type="submit" class="btn btn-primary">
-                    Add
-                </button>
-            </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Add
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
