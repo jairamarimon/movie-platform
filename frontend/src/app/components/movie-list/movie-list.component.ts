@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { MovieService } from '../../movie.service';
 import Movie from '../../Movie';
 import { DatePipe } from '@angular/common';
@@ -9,7 +10,8 @@ import { DatePipe } from '@angular/common';
   selector: 'app-movie-list',
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   providers: [DatePipe],
   templateUrl: './movie-list.component.html',

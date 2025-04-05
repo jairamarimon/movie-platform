@@ -23,7 +23,13 @@ export class MovieService {
   }
 
   getMovie(id: number) {
-    return axios.get<Movie>(`${this.url}/${id}`);
+    return axios
+      .get<Movie>(`${this.url}/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Error fetching movie by ID:', error);
+        throw error;
+      });
   }
 
   updateMovie(id: number, movie: Movie) {
