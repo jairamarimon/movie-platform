@@ -38,7 +38,6 @@ source venv/bin/activate # for Mac/Linux
 With the virtual environment activated, install the required Python dependencies:
 
 ```bash
-cd backend
 pip install -r requirements.txt
 ```
 
