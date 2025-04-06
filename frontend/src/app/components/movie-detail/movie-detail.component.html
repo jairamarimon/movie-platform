@@ -2,7 +2,6 @@
     <div
         *ngIf="movie"
         class="card shadow-sm rounded-4 mb-4"
-        style="max-width: 1000px; margin: 0 auto;"
     >
         <video class="card-img-top" controls>
             <source src={{movie.video}} type="video/mp4">
@@ -17,15 +16,10 @@
                         <i class="bi bi-pencil"></i>
                         Edit
                     </button>
-                    <button class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-trash"></i>
-                        Delete
-                    </button>
                 </div>
             </div>
             <p
-                class="card-text text-muted mb-3"
-                style="font-size: 0.9rem;"
+                class="small-text text-muted mt-1 mb-3"
             >
                 Added on: {{ movie.date_added }}
             </p>

@@ -22,6 +22,9 @@ export class MovieListComponent {
     successMessage: string = '';
     errorMessage: string = '';
     movies: Movie[] = [];
+    selectedMovie: Movie | null = null;
+    showAddMovieModal = false;
+    showDeleteMovieModal = false;
 
     constructor(
       private formbuilder: FormBuilder,
@@ -41,7 +44,7 @@ export class MovieListComponent {
 
     getAllMovies(): void {
       this.movieService.fetchAllMovies().then((response) => {
-        this.movies = response.data.map((movie: any) => {
+        this.movies = response.map((movie: any) => {
           movie.date_added = this.datePipe.transform(movie.date_added, 'mediumDate');
           return movie;
         });
@@ -63,6 +66,7 @@ export class MovieListComponent {
 
   async addMovie() {
     console.log('hi im here');
+    this.movieForm.markAllAsTouched();
     if (this.movieForm.invalid) {
       return;
     }
@@ -72,12 +76,11 @@ export class MovieListComponent {
     try {
       console.log('Adding movie:', movie);
       const response = await this.movieService.addMovie(movie);
-      console.log('Movie added successfully:', response.data);
+      console.log('Movie added successfully:', response);
       this.successMessage = 'Movie added successfully!';
       this.errorMessage = '';
 
-      this.closeMovieModal();
-      this.resetForm();
+      this.closeAddMovieModal();
       this.getAllMovies();
     } catch (error) {
       console.error('Error adding movie:', error);
@@ -86,18 +89,38 @@ export class MovieListComponent {
     }
   }
 
-    resetForm() {
-      this.movieForm.reset();
-      const fileInput = document.getElementById('video') as HTMLInputElement;
-      if (fileInput) {
-        fileInput.value = '';
-      }
+  deleteMovie(): void {
+    console.log('delete here')
+    if (this.selectedMovie?.id) {
+      this.movieService.deleteMovie(this.selectedMovie?.id).then((response) => {
+        this.closeDeleteMovieModal();
+        this.getAllMovies();
+      }).catch((error) => {
+        console.error('Error removing movie details:', error);
+      })
     }
+  }
 
-    closeMovieModal() {
-      const closeButton = document.querySelector('[data-bs-dismiss="modal"]') as HTMLElement;
-      if (closeButton) {
-        closeButton.click();
-      }
+  closeAddMovieModal() {
+    this.showAddMovieModal = false;
+    this.resetMovieForm();
+  }
+
+  resetMovieForm() {
+    this.movieForm.reset();
+    const fileInput = document.getElementById('video') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
     }
+  }
+
+  openDeleteMovieModal(movie: Movie): void {
+    this.selectedMovie = movie;
+    this.showDeleteMovieModal = true;
+  }
+
+  closeDeleteMovieModal() {
+    this.showDeleteMovieModal = false;
+    this.selectedMovie = null;
+  }
 }

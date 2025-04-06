@@ -10,27 +10,29 @@ export class MovieService {
 
   constructor() {}
 
-  addMovie(movie: Movie) {
-    return axios.post<Movie>(this.url, movie, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      }
-    });
+  async addMovie(movie: Movie): Promise<Movie> {
+    try {
+      const response: AxiosResponse<Movie> = await axios.post(this.url, movie, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding movie:', error);
+      throw error;
+    }
   }
 
-  fetchAllMovies() {
-    return axios.get<Movie[]>(this.url);
+  async fetchAllMovies(): Promise<Movie[]> {
+    try {
+      const response: AxiosResponse<Movie[]> = await axios.get(this.url);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching all movies:', error);
+      throw error;
+    }
   }
-
-  // getMovie(id: number) {
-  //   return axios
-  //     .get<Movie>(`${this.url}${id}`)
-  //     .then((response) => response.data)
-  //     .catch((error) => {
-  //       console.error('Error fetching movie by ID:', error);
-  //       throw error;
-  //     });
-  // }
 
   async getMovie(id: number): Promise<Movie> {
     try {
@@ -42,11 +44,22 @@ export class MovieService {
     }
   }
 
-  updateMovie(id: number, movie: Movie) {
-    return axios.put<Movie>(`${this.url}/${id}`, movie);
+  async updateMovie(id: number, movie: Movie): Promise<Movie> {
+    try {
+      const response: AxiosResponse<Movie> = await axios.put(`${this.url}${id}/`, movie);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating movie:', error);
+      throw error;
+    }
   }
 
-  deleteMovie(id: number) {
-    return axios.delete(`${this.url}/${id}`);
+  async deleteMovie(id: number): Promise<void> {
+    try {
+      await axios.delete(`${this.url}${id}/`);
+    } catch (error) {
+      console.error('Error deleting movie:', error);
+      throw error;
+    }
   }
 }

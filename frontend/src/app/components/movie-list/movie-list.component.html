@@ -8,9 +8,8 @@
         </div>
         <div class="col-auto">
             <button
-                data-bs-toggle="modal"
-                data-bs-target="#addMovieModal"
                 class="btn btn-success"
+                (click)="showAddMovieModal = true"
             >
             <i class="bi bi-plus"></i>
                 Add Movie
@@ -25,7 +24,7 @@
                 <tr>
                     <th>Title</th>
                     <th>Description</th>
-                    <th>Date Added</th>
+                    <th class="text-center">Date Added</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -33,12 +32,22 @@
                 <tr *ngFor="let movie of movies">
                     <td>{{ movie.title }}</td>
                     <td>{{ movie.description }}</td>
-                    <td>{{ movie.date_added }}</td>
+                    <td class="text-center">{{ movie.date_added }}</td>
                     <td class="text-center">
-                        <!-- <button class="btn btn-sm btn-outline-primary">View</button> -->
-                        <a [routerLink]="['/movie', movie.id]" class="btn btn-sm btn-outline-primary ms-3">
+                        <a
+                            [routerLink]="['/movie', movie.id]"
+                            class="btn btn-sm btn-outline-primary"
+                        >
+                            <i class="bi bi-eye"></i>
                             View
                         </a>
+                        <button
+                            class="btn btn-sm btn-outline-danger ms-2"
+                            (click)="openDeleteMovieModal(movie)"
+                        >
+                            <i class="bi bi-trash"></i>
+                            Delete
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -48,11 +57,12 @@
   
 <!-- Add Movie Modal -->
 <div
-    class="modal fade"
-    id="addMovieModal"
+    *ngIf="showAddMovieModal"
+    class="modal fade show d-block"
     tabindex="-1"
     aria-labelledby="addMovieModalLabel"
-    aria-hidden="true"
+    aria-modal="true"
+    role="dialog"
 >
     <div class="modal-dialog">
         <div class="modal-content">
@@ -65,8 +75,8 @@
                 </h5>
                 <button
                     class="btn-close"
-                    data-bs-dismiss="modal"
                     aria-label="Close"
+                    (click)="closeAddMovieModal()"
                 ></button>
             </div>
             <form
@@ -88,7 +98,16 @@
                             id="title"
                             placeholder="Enter movie title"
                             formControlName="title"
+                            [ngClass]="{'is-invalid': movieForm.get('title')?.touched && movieForm.get('title')?.invalid}"
                         >
+                        <div
+                            *ngIf="movieForm.get('title')?.touched && movieForm.get('title')?.invalid"
+                            class="small-text text-danger mt-1"
+                        >
+                            <div *ngIf="movieForm.get('title')?.errors?.['required']">
+                                Title is required.
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label
@@ -102,7 +121,16 @@
                             id="description"
                             placeholder="Write a short description"
                             formControlName="description"
+                            [ngClass]="{'is-invalid': movieForm.get('description')?.touched && movieForm.get('description')?.invalid}"
                         ></textarea>
+                        <div
+                            *ngIf="movieForm.get('description')?.touched && movieForm.get('description')?.invalid"
+                            class="small-text text-danger mt-1"
+                        >
+                            <div *ngIf="movieForm.get('description')?.errors?.['required']">
+                                Description is required.
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label
@@ -117,13 +145,22 @@
                             id="video"
                             (change)="onFileChange($event)"
                             accept="video/*"
+                            [ngClass]="{'is-invalid': movieForm.get('video')?.touched && movieForm.get('video')?.invalid}"
                         >
+                        <div
+                            *ngIf="movieForm.get('video')?.touched && movieForm.get('video')?.invalid"
+                            class="small-text text-danger mt-1"
+                        >
+                            <div *ngIf="movieForm.get('video')?.errors?.['required']">
+                                Video file is required.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button
                         class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal"
+                        (click)="closeAddMovieModal()"
                     >
                         Close
                     </button>
@@ -132,6 +169,51 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Remove Movie Modal -->
+<div
+    *ngIf="showDeleteMovieModal"
+    class="modal fade show d-block"
+    tabindex="-1"
+    aria-labelledby="deleteMovieModalLabel"
+    aria-modal="true"
+    role="dialog"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5
+                    class="modal-title"
+                    id="deleteMovieModalLabel"
+                >
+                    Confirm Deletion
+                </h5>
+                <button
+                    class="btn-close"
+                    aria-label="Close"
+                    (click)="closeDeleteMovieModal()"
+                ></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <strong>{{ selectedMovie?.title }}</strong>?
+            </div>
+            <div class="modal-footer">
+                <button
+                    class="btn btn-outline-secondary"
+                    (click)="closeDeleteMovieModal()"
+                >
+                    Cancel
+                </button>
+                <button
+                    class="btn btn-danger"
+                    (click)="deleteMovie()"
+                >
+                    Delete
+                </button>
+            </div>
         </div>
     </div>
 </div>
