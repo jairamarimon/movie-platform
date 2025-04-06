@@ -1,4 +1,7 @@
-<div class="container">
+<div
+    *ngIf="!isLoading"
+    class="container"
+>
     <div
         *ngIf="movie"
         class="card shadow-sm rounded-4 mb-4"
@@ -12,7 +15,10 @@
                     {{ movie.title }}
                 </h3>
                 <div>
-                    <button class="btn btn-sm btn-outline-primary me-2">
+                    <button
+                        class="btn btn-sm btn-primary me-2"
+                        (click)="showEditMovieModal = true"
+                    >
                         <i class="bi bi-pencil"></i>
                         Edit
                     </button>
@@ -30,7 +36,10 @@
                 {{ movie.description }}
             </p>
             <div class="d-flex justify-content-between align-items-center mt-4">
-                <a [routerLink]="'/'" class="btn btn-sm btn-outline-secondary">
+                <a
+                    [routerLink]="'/'"
+                    class="btn btn-sm btn-outline-secondary"
+                >
                     <i class="bi bi-arrow-left"></i>
                     Back to Movie List
                 </a>
@@ -38,4 +47,129 @@
         </div>
     </div>
 </div>
-  
+
+<!-- Edit Movie Modal -->
+<div
+    *ngIf="showEditMovieModal"
+    class="modal fade show d-block"
+    tabindex="-1"
+    aria-labelledby="EditMovieModalLabel"
+    aria-modal="true"
+    role="dialog"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5
+                    class="modal-title"
+                    id="EditMovieModalLabel"
+                >
+                        Update Movie
+                </h5>
+                <button
+                    class="btn-close"
+                    aria-label="Close"
+                    (click)="closeEditMovieModal()"
+                ></button>
+            </div>
+            <form
+                [formGroup]="movieForm"
+                (ngSubmit)="editMovie()"
+                enctype="multipart/form-data"
+            >
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label
+                            for="title"
+                            class="form-label"
+                        >
+                            Title
+                        </label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="title"
+                            placeholder="Enter movie title"
+                            formControlName="title"
+                            [ngClass]="{'is-invalid': movieForm.get('title')?.touched && movieForm.get('title')?.invalid}"
+                            required
+                        >
+                        <div
+                            *ngIf="movieForm.get('title')?.touched && movieForm.get('title')?.invalid"
+                            class="small-text text-danger mt-1"
+                        >
+                            <div *ngIf="movieForm.get('title')?.errors?.['required']">
+                                Title is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label
+                            for="description"
+                            class="form-label"
+                        >
+                            Description
+                        </label>
+                        <textarea
+                            class="form-control"
+                            id="description"
+                            placeholder="Write a short description"
+                            formControlName="description"
+                            [ngClass]="{'is-invalid': movieForm.get('description')?.touched && movieForm.get('description')?.invalid}"
+                        ></textarea>
+                        <div
+                            *ngIf="movieForm.get('description')?.touched && movieForm.get('description')?.invalid"
+                            class="small-text text-danger mt-1"
+                        >
+                            <div *ngIf="movieForm.get('description')?.errors?.['required']">
+                                Description is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label
+                            for="video"
+                            class="form-label"
+                        >
+                            Video File
+                        </label>
+                        <div class="small-text">
+                            <p>Upload a new file to update existing file.</p>
+                        </div>
+                        <input
+                            type="file"
+                            class="form-control"
+                            id="video"
+                            (change)="onFileChange($event)"
+                            accept="video/*"
+                            [ngClass]="{'is-invalid': movieForm.get('video')?.touched && movieForm.get('video')?.invalid}"
+                        >
+                        <div
+                            *ngIf="movieForm.get('video')?.touched && movieForm.get('video')?.invalid"
+                            class="small-text text-danger mt-1"
+                        >
+                            <div *ngIf="movieForm.get('video')?.errors?.['required']">
+                                Video file is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        class="btn btn-outline-secondary"
+                        (click)="closeEditMovieModal()"
+                    >
+                        Close
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        [disabled]="movieForm.pristine || movieForm.invalid"
+                    >
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

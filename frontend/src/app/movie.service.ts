@@ -44,9 +44,13 @@ export class MovieService {
     }
   }
 
-  async updateMovie(id: number, movie: Movie): Promise<Movie> {
+  async updateMovie(id: number, formData: FormData): Promise<any> {
     try {
-      const response: AxiosResponse<Movie> = await axios.put(`${this.url}${id}/`, movie);
+      const response: AxiosResponse<any> = await axios.put(`${this.url}${id}/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return response.data;
     } catch (error) {
       console.error('Error updating movie:', error);

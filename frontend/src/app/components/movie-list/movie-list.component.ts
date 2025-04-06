@@ -18,51 +18,51 @@ import { DatePipe } from '@angular/common';
   styleUrl: './movie-list.component.scss'
 })
 export class MovieListComponent {
-    movieForm !: FormGroup;
-    successMessage: string = '';
-    errorMessage: string = '';
-    movies: Movie[] = [];
-    selectedMovie: Movie | null = null;
-    showAddMovieModal = false;
-    showDeleteMovieModal = false;
+  movieForm !: FormGroup;
+  successMessage: string = '';
+  errorMessage: string = '';
+  movies: Movie[] = [];
+  selectedMovie: Movie | null = null;
+  showAddMovieModal = false;
+  showDeleteMovieModal = false;
 
-    constructor(
-      private formbuilder: FormBuilder,
-      private movieService: MovieService,
-      private datePipe: DatePipe
-    ) {
-      this.movieForm = this.formbuilder.group({
-        title : ['', Validators.required],
-        description : ['', Validators.required],
-        video: [null, Validators.required],
-      })
-    }
+  constructor(
+    private formbuilder: FormBuilder,
+    private movieService: MovieService,
+    private datePipe: DatePipe
+  ) { 
+    this.movieForm = this.formbuilder.group({
+      title : ['', Validators.required],
+      description : ['', Validators.required],
+      video: [null, Validators.required],
+    })
+  }
 
-    ngOnInit(): void {
-      this.getAllMovies();
-    }
+  ngOnInit(): void {
+    this.getAllMovies();
+  }
 
-    getAllMovies(): void {
-      this.movieService.fetchAllMovies().then((response) => {
-        this.movies = response.map((movie: any) => {
-          movie.date_added = this.datePipe.transform(movie.date_added, 'mediumDate');
-          return movie;
-        });
-      }).catch((error) => {
-        console.error('Error fetching movies:', error);
-        this.errorMessage = 'Failed to load movies. Please try again later.';
+  getAllMovies(): void {
+    this.movieService.fetchAllMovies().then((response) => {
+      this.movies = response.map((movie: any) => {
+        movie.date_added = this.datePipe.transform(movie.date_added, 'mediumDate');
+        return movie;
       });
-    }
+    }).catch((error) => {
+      console.error('Error fetching movies:', error);
+      this.errorMessage = 'Failed to load movies. Please try again later.';
+    });
+  }
 
-    onFileChange(event: Event): void {
-      const input = event.target as HTMLInputElement;
-      if (input.files && input.files.length > 0) {
-        const file = input.files[0];
-        console.log(file);
-        this.movieForm.patchValue({ video: file });
-        this.movieForm.get('video')?.updateValueAndValidity();
-      }
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      console.log(file);
+      this.movieForm.patchValue({ video: file });
+      this.movieForm.get('video')?.updateValueAndValidity();
     }
+  }
 
   async addMovie() {
     console.log('hi im here');

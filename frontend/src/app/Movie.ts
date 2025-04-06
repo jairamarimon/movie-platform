@@ -3,5 +3,5 @@ export default interface Movie {
     title: string,
     description: string,
     date_added: string,
-    video: string,
+    video: File,
 }
