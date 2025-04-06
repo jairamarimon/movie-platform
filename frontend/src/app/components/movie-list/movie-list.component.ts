@@ -25,6 +25,7 @@ export class MovieListComponent {
   selectedMovie: Movie | null = null;
   showAddMovieModal = false;
   showDeleteMovieModal = false;
+  showToast: boolean = false;
 
   constructor(
     private formbuilder: FormBuilder,
@@ -58,14 +59,12 @@ export class MovieListComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      console.log(file);
       this.movieForm.patchValue({ video: file });
       this.movieForm.get('video')?.updateValueAndValidity();
     }
   }
 
-  async addMovie() {
-    console.log('hi im here');
+  async addMovie(): Promise<void> {
     this.movieForm.markAllAsTouched();
     if (this.movieForm.invalid) {
       return;
@@ -74,30 +73,40 @@ export class MovieListComponent {
     const movie: Movie = this.movieForm.value;
 
     try {
-      console.log('Adding movie:', movie);
-      const response = await this.movieService.addMovie(movie);
-      console.log('Movie added successfully:', response);
+      await this.movieService.addMovie(movie);
+
       this.successMessage = 'Movie added successfully!';
       this.errorMessage = '';
 
       this.closeAddMovieModal();
+      this.displayToast();
       this.getAllMovies();
     } catch (error) {
       console.error('Error adding movie:', error);
+
       this.successMessage = '';
       this.errorMessage = 'Failed to add movie. Please try again.';
     }
   }
 
-  deleteMovie(): void {
-    console.log('delete here')
-    if (this.selectedMovie?.id) {
-      this.movieService.deleteMovie(this.selectedMovie?.id).then((response) => {
-        this.closeDeleteMovieModal();
-        this.getAllMovies();
-      }).catch((error) => {
-        console.error('Error removing movie details:', error);
-      })
+  async deleteMovie(): Promise<void> {
+    if (!this.selectedMovie?.id) {
+      return;
+    }
+    try {
+      await this.movieService.deleteMovie(this.selectedMovie.id);
+      
+      this.successMessage = 'Movie deleted successfully!';
+      this.errorMessage= '';
+
+      this.closeDeleteMovieModal();
+      this.displayToast();
+      this.getAllMovies();
+    } catch(error) {
+      console.error('Error removing movie details:', error);
+
+      this.errorMessage = 'Failed to delete movie. Please try again.';
+      this.successMessage = '';
     }
   }
 
@@ -122,5 +131,16 @@ export class MovieListComponent {
   closeDeleteMovieModal() {
     this.showDeleteMovieModal = false;
     this.selectedMovie = null;
+  }
+
+  displayToast() {
+    this.showToast = true;
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+  }
+
+  hideToast() {
+    this.showToast = false;
   }
 }

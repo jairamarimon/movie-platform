@@ -22,3 +22,27 @@
 .modal {
     background-color: rgba(0, 0, 0, 0.5);
 }
+
+.toast {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: auto;
+    max-width: 300px;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.toast-success {
+    background-color: #28a745;
+}
+
+.toast-error {
+    background-color: #dc3545;
+}
+
+.toast.show {
+    display: block;
+    opacity: 1;
+}
