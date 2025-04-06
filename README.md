@@ -22,16 +22,27 @@ Start by cloning the project to your local set up:
 git clone <https://github.com/jairamarimon/movie-platform.git>
 ```
 
-### 2. Install Python Dependencies
+### 2. Set Up Virtual Environment
 
-Navigate to the backend directory and install the required Python dependencies:
+Navigate to the backend directory and create a virtual environment. This ensures that the Python dependencies are isolated for this project.
+
+```bash
+cd backend
+python -m venv venv
+.\venv\Scripts\activate # for Windows
+source venv/bin/activate # for Mac/Linux
+```
+
+### 3. Install Python Dependencies
+
+With the virtual environment activated, install the required Python dependencies:
 
 ```bash
 cd backend
 pip install -r requirements.txt
 ```
 
-### 3. Set Up the Database
+### 4. Set Up the Database
 
 Run the migrations to set up the database:
 
@@ -39,7 +50,7 @@ Run the migrations to set up the database:
 python manage.py migrate
 ```
 
-### 4. Run Django Server
+### 5. Run Django Server
 
 ```bash
 python manage.py runserver
