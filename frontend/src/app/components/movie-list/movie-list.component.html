@@ -18,40 +18,51 @@
     </div>
 </div>
 <div class="container">
-    <div class="card shadow-sm rounded-4 p-3">
-        <table class="table align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th class="text-center">Date Added</th>
-                    <th class="text-center">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let movie of movies">
-                    <td>{{ movie.title }}</td>
-                    <td>{{ movie.description }}</td>
-                    <td class="text-center">{{ movie.date_added }}</td>
-                    <td class="text-center">
-                        <a
-                            [routerLink]="['/movie', movie.id]"
-                            class="btn btn-sm btn-outline-primary"
-                        >
-                            <i class="bi bi-eye"></i>
-                            View
-                        </a>
-                        <button
-                            class="btn btn-sm btn-outline-danger ms-2"
-                            (click)="openDeleteMovieModal(movie)"
-                        >
-                            <i class="bi bi-trash"></i>
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div
+        *ngIf="!isLoading"
+        class="card shadow-sm rounded-4 p-3"
+    >
+        <div
+            *ngIf="movies.length === 0; else moviesTable"
+            class="text-center"
+        >
+            No movies to show.
+        </div>
+        <ng-template #moviesTable>
+            <table class="table align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th class="text-center">Date Added</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let movie of movies">
+                        <td>{{ movie.title }}</td>
+                        <td>{{ movie.description }}</td>
+                        <td class="text-center">{{ movie.date_added }}</td>
+                        <td class="text-center">
+                            <a
+                                [routerLink]="['/movie', movie.id]"
+                                class="btn btn-sm btn-outline-primary"
+                            >
+                                <i class="bi bi-eye"></i>
+                                View
+                            </a>
+                            <button
+                                class="btn btn-sm btn-outline-danger ms-2"
+                                (click)="openDeleteMovieModal(movie)"
+                            >
+                                <i class="bi bi-trash"></i>
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-template>
     </div>
 </div>
   
@@ -226,8 +237,8 @@
     aria-live="assertive" 
     aria-atomic="true"
     [ngClass]="{
-        'toast-success': !!successMessage, 
-        'toast-error': !!errorMessage,
+        'bg-success': !!successMessage, 
+        'bg-danger': !!errorMessage,
         'show': showToast
     }"
 >

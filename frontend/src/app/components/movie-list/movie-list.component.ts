@@ -26,6 +26,7 @@ export class MovieListComponent {
   showAddMovieModal = false;
   showDeleteMovieModal = false;
   showToast: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private formbuilder: FormBuilder,
@@ -43,16 +44,21 @@ export class MovieListComponent {
     this.getAllMovies();
   }
 
-  getAllMovies(): void {
-    this.movieService.fetchAllMovies().then((response) => {
+  async getAllMovies(): Promise<void> {
+    this.isLoading = true;
+
+    try {
+      const response = await this.movieService.fetchAllMovies();
       this.movies = response.map((movie: any) => {
         movie.date_added = this.datePipe.transform(movie.date_added, 'mediumDate');
         return movie;
       });
-    }).catch((error) => {
+    } catch (error) {
       console.error('Error fetching movies:', error);
       this.errorMessage = 'Failed to load movies. Please try again later.';
-    });
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   onFileChange(event: Event): void {

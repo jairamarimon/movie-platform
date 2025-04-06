@@ -32,14 +32,6 @@
     transition: opacity 0.5s ease-in-out;
 }
 
-.toast-success {
-    background-color: #28a745;
-}
-
-.toast-error {
-    background-color: #dc3545;
-}
-
 .toast.show {
     display: block;
     opacity: 1;

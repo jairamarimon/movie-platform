@@ -101,7 +101,7 @@ export class MovieDetailComponent {
     const id = this.movieId as number;
     try {
       await this.movieService.updateMovie(id, formData);
-      this.successMessage = 'Movie edited successfully!';
+      this.successMessage = 'Movie updated successfully!';
       this.errorMessage = '';
 
       this.closeEditMovieModal();
